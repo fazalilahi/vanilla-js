@@ -104,7 +104,72 @@ class CustomPromise {
       throw result
     })
   }
-}
 
-// new Promise((resolve, reject) => {
-// })
+  static resolve(val) {
+    return new CustomPromise(resolve => {
+      resolve(val)
+    })
+  }
+
+  static reject(val) {
+    return new CustomPromise((resolve, reject) => {
+      reject(val)
+    })
+  }
+
+  static all(promises) {
+    const results = []
+    let completedPromises = 0
+    new CustomPromise((resolve, reject) => {
+      for(i=0; i<promises.length; i++) {
+        const promise = promises[i]
+        promise.then(val => {
+          results[i] = val
+          completedPromises++
+          if (completedPromises == promise.length ) resolve(results)
+        }).catch(reject)
+      }
+    })
+  }
+
+  static allSetteled(promises) {
+    const results = []
+    let completedPromises = 0
+    new CustomPromise((resolve) => {
+      for(i=0; i<promises.length; i++) {
+        const promise = promises[i]
+        promise.then(val => {
+          results[i] = {status: STATE.FULFILLED, val}
+        }).catch(reason => {
+          results[i] = {status: STATE.REJECTED, reason}
+        }).finally(() => {
+          completedPromises++
+          if (completedPromises === promises.length) resolve(results)
+        })
+      }
+    })
+  }
+
+  static race(promises) {
+    return new CustomPromise((resolve, reject) => {
+      promises.forEach(promise => {
+        promise.then(resolve).catch(reject)
+      })
+    })
+  }
+
+  static any(promises) {
+    const errors = []
+    rejectedPromises = 0
+    return new CustomPromise((resolve, reject) => {
+      for(i=0; i<promises.length; i++) {
+        const promise = promises[i]
+        promise.then(resolve).catch(reason => {
+          rejectedPromises++
+          errors[i] = reason
+          if (rejectedPromises === promises.length) reject(errors)
+        })
+      }
+    })
+  }
+}
