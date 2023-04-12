@@ -1,0 +1,19 @@
+{
+  "name": "custompromise",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest --watchAll --noStackTrace"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/fazalilahi/vanilla-js.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/fazalilahi/vanilla-js/issues"
+  },
+  "homepage": "https://github.com/fazalilahi/vanilla-js#readme"
+}
